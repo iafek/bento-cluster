@@ -6,9 +6,43 @@ set -o pipefail  # Pipeline status failure if any command fails
 
 hostname=`hostname`
 
-sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/cassandra/conf.bento/*
+chmod ugo+rwx /var/log
+chmod ugo+rwx /var/lib
+
+# Format namenode
+su -l hdfs -s /bin/bash -c "/usr/bin/hdfs namenode -format"
+su -l hdfs -s /bin/bash -c "mkdir -p /var/log/hadoop-hdfs"
+
+# Initialize ZooKeeper
+su -l hbase -s /bin/bash -c "/usr/bin/zookeeper-server-initialize"
+su -l hbase -s /bin/bash -c "mkdir -p /var/log/zookeeper"
+
+# Initialize HBase
+su -l hbase -s /bin/bash -c "mkdir -p /var/log/hbase"
+
+# Initialize YARN
+su -l yarn -s /bin/bash -c "mkdir -p /var/log/hadoop-yarn"
+
+# Initialize MapReduce
+su -l mapred -s /bin/bash -c "mkdir -p /var/log/hadoop-mapreduce"
+
+# Initialize Oozie
+#USER oozie
+# mkdir -p /var/log/oozie/
+
+# Initialize Hive
+#USER hive
+# mkdir -p /var/log/hive
+
+# Initialize Hue
+#USER hue
+# mkdir -p /var/log/hue
+
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hbase/conf.bento/*
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hadoop/conf.bento/*
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/zookeeper/conf.bento/*
+sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/oozie/conf.bento/*
+sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hive/conf.bento/*
+sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hue/conf.bento/*
 
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

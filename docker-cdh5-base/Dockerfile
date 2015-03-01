@@ -1,5 +1,5 @@
 FROM centos:centos6
-MAINTAINER Kiji Project <dev@kiji.org>
+MAINTAINER Itamar Afek <iafek@salesforce.com>
 
 RUN yum clean all
 
@@ -8,12 +8,7 @@ RUN yum install -y yum-utils python-setuptools
 RUN yum-config-manager --add-repo http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/cloudera-manager.repo
 RUN yum-config-manager --add-repo http://rpm.datastax.com/community
 
-RUN yum install -y --nogpgcheck \
-  cassandra-2.0.9 \
-  jna \
-  dsc20 \
-  opscenter \
-  datastax-agent
+RUN yum install -y --nogpgcheck jna
 
 RUN /usr/sbin/alternatives --install \
   /usr/bin/java java /usr/java/jdk1.7.0_55-cloudera/bin/java 999999999 \
@@ -65,17 +60,29 @@ ADD hadoop-conf /etc/hadoop/conf.bento
 ADD zookeeper-conf /etc/zookeeper/conf.bento
 ADD hbase-conf /etc/hbase/conf.bento
 
-# Install Cassandra configuration
-ADD cassandra-conf /etc/cassandra/conf.bento
-RUN alternatives --verbose --install /etc/cassandra/conf cassandra-conf /etc/cassandra/conf.bento 50
-RUN alternatives --set cassandra-conf /etc/cassandra/conf.bento
-
 # Install supervisord and configuration
 RUN /usr/bin/easy_install supervisor
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
 USER root
+VOLUME /var/log
+#RUN chmod ugo+rwx /var/log
+
+USER hdfs
+VOLUME /var/lib
+#RUN chmod ugo+rwx /var/lib
+
+USER root
 
 ADD hdfs-init /hdfs-init
-
 ADD start /start
+
+EXPOSE 60000
+EXPOSE 60010
+EXPOSE 60020
+EXPOSE 60030
+EXPOSE 8088
+EXPOSE 9001
+EXPOSE 50070
+EXPOSE 2181
+EXPOSE 8888
