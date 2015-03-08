@@ -70,6 +70,14 @@ USER root
 ADD hdfs-init /hdfs-init
 ADD start /start
 
+USER hdfs
+VOLUME /var/lib/hadoop-hdfs/cache/hdfs/dfs/data/
+VOLUME /var/lib/hadoop-hdfs/cache/hdfs/dfs/name/
+#VOLUME /var/lib/hadoop-yarn/cache/yarn
+USER root
+VOLUME /tmp
+VOLUME /var/log
+
 EXPOSE 60000
 EXPOSE 60010
 EXPOSE 60020

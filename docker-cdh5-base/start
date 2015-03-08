@@ -6,38 +6,7 @@ set -o pipefail  # Pipeline status failure if any command fails
 
 hostname=`hostname`
 
-# chmod ugo+rwx /var/log
-# chmod ugo+rwx /var/lib
-
-# Format namenode
-# su -l hdfs -s /bin/bash -c "/usr/bin/hdfs namenode -format"
-# su -l hdfs -s /bin/bash -c "mkdir -p /var/log/hadoop-hdfs"
-
-# Initialize ZooKeeper
-# su -l hbase -s /bin/bash -c "/usr/bin/zookeeper-server-initialize"
-# su -l hbase -s /bin/bash -c "mkdir -p /var/log/zookeeper"
-
-# Initialize HBase
-# su -l hbase -s /bin/bash -c "mkdir -p /var/log/hbase"
-
-# Initialize YARN
-# su -l yarn -s /bin/bash -c "mkdir -p /var/log/hadoop-yarn"
-
-# Initialize MapReduce
-# su -l mapred -s /bin/bash -c "mkdir -p /var/log/hadoop-mapreduce"
-
-# Initialize Oozie
-#USER oozie
-# mkdir -p /var/log/oozie/
-
-# Initialize Hive
-#USER hive
-# mkdir -p /var/log/hive
-
-# Initialize Hue
-#USER hue
-# mkdir -p /var/log/hue
-
+# resolve $BENTO_HOST in configuration files
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hbase/conf.bento/*
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hadoop/conf.bento/*
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/zookeeper/conf.bento/*
@@ -46,6 +15,45 @@ sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hbase-solr/conf.bento/*
 #sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hive/conf.bento/*
 #sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hue/conf.bento/*
 
+# Initialize data dirs for hadoop
+chown -R hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
+chown -R hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/data
+chgrp -R hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
+chgrp -R hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/data
+
+# Format namenode
+su -l hdfs -s /bin/bash -c "/usr/bin/hdfs namenode -format"
+
+# Initialize namenode
+mkdir -p /var/log/hadoop-hdfs
+chown -R hdfs /var/log/hadoop-hdfs
+chgrp -R hdfs /var/log/hadoop-hdfs
+
+# Initialize ZooKeeper
+su -l zookeeper -s /bin/bash -c "/usr/bin/zookeeper-server-initialize"
+mkdir -p /var/log/zookeeper
+chown -R zookeeper /var/log/zookeeper
+chgrp -R zookeeper /var/log/zookeeper
+
+# Initialize HBase
+mkdir -p /var/log/hbase
+chown -R hbase /var/log/hbase
+chgrp -R hbase /var/log/hbase
+mkdir -p /var/log/hbase-solr
+chown -R hbase /var/log/hbase-solr
+chgrp -R hbase /var/log/hbase-solr
+
+# Initialize YARN
+mkdir -p /var/log/hadoop-yarn
+chown -R yarn /var/log/hadoop-yarn
+chgrp -R yarn /var/log/hadoop-yarn
+
+# Initialize MapReduce
+mkdir -p /var/log/hadoop-mapreduce
+chown -R mapred /var/log/hadoop-mapreduce
+chgrp -R mapred /var/log/hadoop-mapreduce
+
+# copy hbase indexer jars
 cp /usr/lib/hbase-solr/lib/hbase-sep-* /usr/lib/hbase/lib/
 cp /usr/lib/hbase-solr/lib/hbase-sep-* /usr/lib/hbase/
 
