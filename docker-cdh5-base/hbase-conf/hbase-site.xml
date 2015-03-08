@@ -21,12 +21,32 @@
  */
 -->
 <configuration>
-  <property>
-    <name>hbase.cluster.distributed</name>
-    <value>true</value>
-  </property>
-  <property>
-    <name>hbase.rootdir</name>
-    <value>hdfs://$BENTO_HOST:8020/hbase</value>
-  </property>
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://$BENTO_HOST:8020/hbase</value>
+    </property>
+    <property>
+        <name>hbase.replication</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>replication.source.ratio</name>
+        <value>1.0</value>
+    </property>
+    <property>
+        <name>replication.source.nb.capacity</name>
+        <value>1000</value>
+    </property>
+    <property>
+        <name>replication.replicationsource.implementation</name>
+        <value>com.ngdata.sep.impl.SepReplicationSource</value>
+    </property>
+    <property>
+        <name>hbase.ipc.warn.response.time</name>
+        <value>60000</value>
+    </property>
 </configuration>

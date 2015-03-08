@@ -6,25 +6,25 @@ set -o pipefail  # Pipeline status failure if any command fails
 
 hostname=`hostname`
 
-chmod ugo+rwx /var/log
-chmod ugo+rwx /var/lib
+# chmod ugo+rwx /var/log
+# chmod ugo+rwx /var/lib
 
 # Format namenode
-su -l hdfs -s /bin/bash -c "/usr/bin/hdfs namenode -format"
-su -l hdfs -s /bin/bash -c "mkdir -p /var/log/hadoop-hdfs"
+# su -l hdfs -s /bin/bash -c "/usr/bin/hdfs namenode -format"
+# su -l hdfs -s /bin/bash -c "mkdir -p /var/log/hadoop-hdfs"
 
 # Initialize ZooKeeper
-su -l hbase -s /bin/bash -c "/usr/bin/zookeeper-server-initialize"
-su -l hbase -s /bin/bash -c "mkdir -p /var/log/zookeeper"
+# su -l hbase -s /bin/bash -c "/usr/bin/zookeeper-server-initialize"
+# su -l hbase -s /bin/bash -c "mkdir -p /var/log/zookeeper"
 
 # Initialize HBase
-su -l hbase -s /bin/bash -c "mkdir -p /var/log/hbase"
+# su -l hbase -s /bin/bash -c "mkdir -p /var/log/hbase"
 
 # Initialize YARN
-su -l yarn -s /bin/bash -c "mkdir -p /var/log/hadoop-yarn"
+# su -l yarn -s /bin/bash -c "mkdir -p /var/log/hadoop-yarn"
 
 # Initialize MapReduce
-su -l mapred -s /bin/bash -c "mkdir -p /var/log/hadoop-mapreduce"
+# su -l mapred -s /bin/bash -c "mkdir -p /var/log/hadoop-mapreduce"
 
 # Initialize Oozie
 #USER oozie
@@ -41,8 +41,12 @@ su -l mapred -s /bin/bash -c "mkdir -p /var/log/hadoop-mapreduce"
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hbase/conf.bento/*
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hadoop/conf.bento/*
 sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/zookeeper/conf.bento/*
-sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/oozie/conf.bento/*
-sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hive/conf.bento/*
-sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hue/conf.bento/*
+sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hbase-solr/conf.bento/*
+#sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/oozie/conf.bento/*
+#sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hive/conf.bento/*
+#sed -i -e "s/\$BENTO_HOST/$hostname/" /etc/hue/conf.bento/*
+
+cp /usr/lib/hbase-solr/lib/hbase-sep-* /usr/lib/hbase/lib/
+cp /usr/lib/hbase-solr/lib/hbase-sep-* /usr/lib/hbase/
 
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

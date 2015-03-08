@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<property>
+    <name>hbaseindexer.zookeeper.connectstring</name>
+    <value>$BENTO_HOST</value>
+</property>
+<property>
+<name>hbase.zookeeper.quorum</name>
+<value>$BENTO_HOST</value>
+</property>
+<property>
+<name>hbase.zookeeper.property.clientPort</name>
+<value>2181</value>
+</property>

@@ -3,12 +3,12 @@ MAINTAINER Itamar Afek <iafek@salesforce.com>
 
 RUN yum clean all
 
-RUN yum install -y yum-utils python-setuptools
+RUN yum install -v -y yum-utils python-setuptools
 
 RUN yum-config-manager --add-repo http://archive.cloudera.com/cm5/redhat/6/x86_64/cm/cloudera-manager.repo
 RUN yum-config-manager --add-repo http://rpm.datastax.com/community
 
-RUN yum install -y --nogpgcheck jna
+RUN yum install -v -y --nogpgcheck jna mlocate telnet
 
 RUN /usr/sbin/alternatives --install \
   /usr/bin/java java /usr/java/jdk1.7.0_55-cloudera/bin/java 999999999 \
@@ -59,18 +59,11 @@ RUN /usr/sbin/alternatives --install \
 ADD hadoop-conf /etc/hadoop/conf.bento
 ADD zookeeper-conf /etc/zookeeper/conf.bento
 ADD hbase-conf /etc/hbase/conf.bento
+ADD hbase-solr-conf /etc/hbase-solr/conf.bento
 
 # Install supervisord and configuration
 RUN /usr/bin/easy_install supervisor
 ADD supervisord.conf /etc/supervisor/supervisord.conf
-
-USER root
-VOLUME /var/log
-#RUN chmod ugo+rwx /var/log
-
-USER hdfs
-VOLUME /var/lib
-#RUN chmod ugo+rwx /var/lib
 
 USER root
 
