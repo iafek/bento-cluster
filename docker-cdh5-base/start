@@ -28,6 +28,7 @@ su -l hdfs -s /bin/bash -c "/usr/bin/hdfs namenode -format"
 mkdir -p /var/log/hadoop-hdfs
 chown -R hdfs /var/log/hadoop-hdfs
 chgrp -R hdfs /var/log/hadoop-hdfs
+chmod -R o+w /var/log/hadoop-hdfs
 
 # Initialize ZooKeeper
 su -l zookeeper -s /bin/bash -c "/usr/bin/zookeeper-server-initialize"
@@ -52,6 +53,10 @@ chgrp -R yarn /var/log/hadoop-yarn
 mkdir -p /var/log/hadoop-mapreduce
 chown -R mapred /var/log/hadoop-mapreduce
 chgrp -R mapred /var/log/hadoop-mapreduce
+
+
+#mkdir -p /data/mapred/local
+#chown -R mapred:hadoop /data/mapred/local
 
 # copy hbase indexer jars
 cp /usr/lib/hbase-solr/lib/hbase-sep-* /usr/lib/hbase/lib/

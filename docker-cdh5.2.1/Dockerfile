@@ -4,6 +4,8 @@ MAINTAINER Itamar Afek <iafek@salesforce.com>
 
 RUN yum-config-manager --add-repo http://archive.cloudera.com/cdh5/redhat/6/x86_64/cdh/5.2.1/
 
+RUN rpm --import http://archive.cloudera.com/cdh5/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloudera
+
 RUN yum install -v -y --nogpgcheck \
   zookeeper-server \
   hadoop-hdfs-namenode \
@@ -16,7 +18,10 @@ RUN yum install -v -y --nogpgcheck \
   hbase-master \
   hbase-regionserver \
   hbase-solr-indexer \
-  hbase-solr-doc
+  hbase-solr-doc \
+  hadoop-0.20-mapreduce-jobtracker \
+  hadoop-0.20-mapreduce-tasktracker
+# hadoop-client
 #  oozie \
 #  hive \
 #  hue

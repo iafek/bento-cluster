@@ -18,6 +18,12 @@ set -o pipefail  # Pipeline status failure if any command fails
 /usr/bin/hadoop fs -chown yarn:mapred /var/log/hadoop-yarn
 /usr/bin/hadoop fs -chmod -R 1777 /var/log/hadoop-yarn
 
+#/usr/bin/hadoop fs -mkdir -p /var/lib/hadoop-hdfs/cache/mapred/mapred/staging
+#/usr/bin/hadoop fs -chmod 1777 /var/lib/hadoop-hdfs/cache/mapred/mapred/staging
+#/usr/bin/hadoop fs -chown -R mapred /var/lib/hadoop-hdfs/cache/mapred
+
+#/usr/bin/hadoop fs -mkdir -p /tmp/mapred/system
+#/usr/bin/hadoop fs -chown mapred:hadoop /tmp/mapred/system
 
 # Initialize HBase directory
 
